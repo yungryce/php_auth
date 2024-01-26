@@ -88,7 +88,7 @@ if ($first_name && $last_name && $email && $phone && $password && !(existingUser
  
         $stmt->execute();
         $conn->commit();
-        header("refresh: 5, url=auth.php");
+        header("refresh: 5, url=login.php");
         $_SESSION['message'] =  "Please check your email to activate your account";
         exit;
     }

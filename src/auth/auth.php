@@ -3,10 +3,12 @@ session_start();
 require_once(__DIR__ . '/../commons/connection.php');
 include 'user_functions.php';
 
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
 
 $email = filter_var($_GET['email'] ?? null, FILTER_VALIDATE_EMAIL);
 $verification_code = $_GET['code'] ?? null;
-
+echo $email;
 if ($email && $verification_code)
 {
 	if (isAccountActivated($conn, $email))
@@ -18,14 +20,12 @@ if ($email && $verification_code)
         else
             $_SESSION['message'] = "Failed to activate the account. Please try again.";
     }
-    header("location: login.php");
-    exit;
 }
 else
 {
 	$_SESSION['message'] = "Invalid activation link";
-	header("location: login.php");
-    exit;
-}
 
+}
+header("location: login.php");
+exit;
 ?>

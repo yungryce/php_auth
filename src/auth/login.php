@@ -5,7 +5,7 @@ require_once(__DIR__ . '/../commons/connection.php');
 
 if (isset($_SESSION['user_id']) && $_SESSION['login_successful'] === true)
 {
-    header("location: profile.php");
+    header("location: /");
     exit;
 }
 
@@ -28,11 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
         {
             if ($user_exist->activated)
             {
+                $_SESSION['message'] = "Invalid username or password";
                 $_SESSION['user_id'] = $user_exist->id;
                 $_SESSION['username'] = $user_exist->username;
                 $_SESSION['login_successful'] = true;
 
-                header("refresh: 5, url=index.php");
+                header("refresh: 5, url=/");
                 $_SESSION['message'] = "Login successful..";
                 $check_user->close();
                 exit();
@@ -57,7 +58,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/9309addca2.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="/assets/css/main.css">
+	<link rel="stylesheet" href="../assets/css/styles.css">
+
 	<title>Login</title>
 </head>
 
@@ -84,7 +86,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             <div class="flex justify-center">
                 <input style="font-family: FontAwesome" value="&#xf090;" type="submit" class="w-36 bg-purple-900 text-white font-bold py-2 px-4 w-full rounded-lg transition duration-300 hover:bg-pink-500 cursor-pointer">
             </div>
-            <p class="text-center mt-4 text-gray-600">Don't have an account? <a href="register.php" class="hover:opacity-75 text-pink-800">Sign up now</a>.</p>
+            <p class="text-center mt-4 text-gray-600">Don't have an account? <a href="signup.php" class="hover:opacity-75 text-pink-800">Sign up now</a>.</p>
         </form>
     </div>
 

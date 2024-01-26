@@ -41,6 +41,7 @@ function generate_username($first_name, $last_name)
 }
 
 
+/**
 function send_activation_email($email, $verification_code, $username)
 {
     $verification_code_url = "http://localhost/auth.php?email=$email&code=$verification_code";
@@ -67,9 +68,9 @@ function send_activation_email($email, $verification_code, $username)
         return false;
     }
 }
+*/
 
 
-/** 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 // require 'vendor/autoload.php';
@@ -77,14 +78,14 @@ require_once __DIR__ . '/../../vendor/autoload.php';
 
 function send_activation_email($email, $verification_code, $username)
 {
-    $verification_code_url = "http://localhost/auth.php?email=$email&code=$verification_code";
+    $verification_code_url = "http://auth_/auth/auth.php?email=$email&code=$verification_code";
 
     // set email subject & body
     $subject = "Account Verification";
     $message = <<<MESSAGE
             Hi $username,
-            Please click the following link to activate your account:
-            <a href="$verification_code_url">$verification_code</a>
+            Please click the following <a href="$verification_code_url">Link</a> to activate your account or use the link below:
+            $verification_code_url
     MESSAGE;
 
     $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
@@ -114,7 +115,7 @@ function send_activation_email($email, $verification_code, $username)
         $_SESSION['message'] = "Failed to send activation code";
         return false;
     }
-} */
+}
 
 function handlePhone($phone)
 {
@@ -198,8 +199,13 @@ function activateAccount($conn, $email, $verification_code)
     $stmt->bind_param("ss", $email, $verification_code);
 
 	$result = $stmt->execute();
+    if (!$result) {
+        echo "Error: " . $stmt->error;
+    }
 
     $stmt->close();
 
 	return $result;
 }
+
+?>
