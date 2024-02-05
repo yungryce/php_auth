@@ -40,45 +40,14 @@ function generate_username($first_name, $last_name)
         return $username;
 }
 
-
-/**
-function send_activation_email($email, $verification_code, $username)
-{
-    $verification_code_url = "http://localhost/auth.php?email=$email&code=$verification_code";
-
-    // set email subject & body
-    $subject = "Account Verification";
-    $message = "
-        Hi $username,
-        Please click the following link to activate your account:
-        <a href=\"$verification_code_url\">$verification_code</a>
-    ";
-
-    $headers = "From: Your Name <no-reply@yourdomain.com>\r\n";
-    $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-
-    try {
-        // Send the email using the mail function
-        mail($email, $subject, $message, $headers);
-
-        return true;
-    } catch (Exception $e) {
-        error_log("Error sending email to $email: $e");
-        $_SESSION['message'] = "Failed to send activation code";
-        return false;
-    }
-}
-*/
-
-
+require_once __DIR__ . '/../../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 // require 'vendor/autoload.php';
-require_once __DIR__ . '/../../vendor/autoload.php';
 
-function send_activation_email($email, $verification_code, $username)
+function send_activation_email($email, $verification_code, $username, $link)
 {
-    $verification_code_url = "http://auth_/auth/auth.php?email=$email&code=$verification_code";
+    $verification_code_url = "http://auth_/auth/$link.php?email=$email&code=$verification_code";
 
     // set email subject & body
     $subject = "Account Verification";
@@ -89,7 +58,7 @@ function send_activation_email($email, $verification_code, $username)
     MESSAGE;
 
     $message = htmlspecialchars($message, ENT_QUOTES, 'UTF-8');
-    $phpmailer = new PHPMailer(true);
+    $phpmailer = new PHPMailer();
 
     try {
         $phpmailer->isSMTP();
@@ -105,6 +74,7 @@ function send_activation_email($email, $verification_code, $username)
         $phpmailer->Subject = $subject;
         $phpmailer->isHTML(true);
         $phpmailer->Body = $message;
+        echo $verification_code_url;
 
         // Send the message
         $phpmailer->send();
@@ -117,32 +87,6 @@ function send_activation_email($email, $verification_code, $username)
     }
 }
 
-function handlePhone($phone)
-{
-    $numericString = '';
-
-    for ($i = 0; $i < strlen($phone); $i++)
-    {
-        $char = $phone[$i];
-        if (is_numeric($char))
-            $numericString .= $char;
-    }
-    $numericLength = strlen($numericString);
-
-    if ($numericLength >= 10)
-    {
-        if ($numericString[0] === '0' && $numericLength === 11)
-            return $numericString;
-        elseif ($numericLength === 10)
-            return '0' . $numericString;
-        elseif ($numericLength > 11)
-        {
-            $numericString = substr($numericString, -10);
-            return '0' . $numericString;
-        }
-    }
-    return null;
-}
 
 function strongPassword($password)
 {
@@ -174,7 +118,33 @@ function strongPassword($password)
         return null;
 }
 
+/**
+function handlePhone($phone)
+{
+    $numericString = '';
 
+    for ($i = 0; $i < strlen($phone); $i++)
+    {
+        $char = $phone[$i];
+        if (is_numeric($char))
+            $numericString .= $char;
+    }
+    $numericLength = strlen($numericString);
+
+    if ($numericLength >= 10)
+    {
+        if ($numericString[0] === '0' && $numericLength === 11)
+            return $numericString;
+        elseif ($numericLength === 10)
+            return '0' . $numericString;
+        elseif ($numericLength > 11)
+        {
+            $numericString = substr($numericString, -10);
+            return '0' . $numericString;
+        }
+    }
+    return null;
+}
 
 function isAccountActivated($conn, $email)
 {
@@ -207,5 +177,5 @@ function activateAccount($conn, $email, $verification_code)
 
 	return $result;
 }
-
+*/
 ?>
